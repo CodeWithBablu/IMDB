@@ -2,13 +2,6 @@ import Card from "./Card";
 import { useState } from "react";
 import { motion } from "framer-motion";
 
-// var movies = [
-//   {
-//     title: "Hello",
-//     description: "Genius loda",
-//     rate: "4",
-//     lang: "English"
-//   }]
 
 export default function Cards({ lang }) {
 

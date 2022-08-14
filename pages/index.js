@@ -20,8 +20,29 @@ export default function Home() {
     console.log(cnt);
     cnt = cnt == undefined ? 0 : cnt;
     cnt++;
-    localStorage.setItem('count', cnt.toString());
-    localStorage.setItem(cnt.toString(), JSON.stringify(data));
+
+    if (typeof (data.image) == 'string') {
+      localStorage.setItem('count', cnt.toString());
+      localStorage.setItem(cnt.toString(), JSON.stringify(data));
+    }
+    else {
+
+      localStorage.setItem('count', cnt.toString());
+
+      const reader = new FileReader();
+
+      reader.addEventListener("load", () => {
+        console.log("succes")
+        if (typeof window !== 'undefined') {
+          data.image = reader.result;
+          localStorage.setItem(cnt.toString(), JSON.stringify(data));
+        }
+      })
+
+      reader.readAsDataURL(data.image[0]);
+
+    }
+
     reset();
   }
 
