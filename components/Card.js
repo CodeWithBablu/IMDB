@@ -7,7 +7,7 @@ export default function Card({ movie }) {
   </svg>
 
   return (
-    <div className="flex items-center bg-black py-4 px-2 text-white shadow-lg shadow-rose-300 mb-2
+    <div className="flex items-center bg-black p-4 text-white shadow-lg shadow-sky-400 mb-4 
       rounded-lg">
 
       <div className="flex w-full">
@@ -20,7 +20,7 @@ export default function Card({ movie }) {
         </div>
         <div className=" w-full px-3">
           <h1 className=" text-md font-bold">{movie.title}</h1>
-          <h2 className="ml-2">{movie.description}</h2>
+          <h2 className="ml-2 text-gray-300">{movie.description}</h2>
         </div>
       </div>
       <div className="flex items-center pr-2 text-cyan-400">

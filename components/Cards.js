@@ -1,21 +1,64 @@
 import Card from "./Card";
-import { useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
+
+// var movies = [
+//   {
+//     title: "Hello",
+//     description: "Genius loda",
+//     rate: "4",
+//     lang: "English"
+//   }]
 
 export default function Cards({ lang }) {
 
-  let cnt = 0;
-  if (typeof window !== 'undefined') {
-    // Perform localStorage action
-    cnt = localStorage.getItem('count');
+  function getMovies() {
+    let cnt = 0;
+    var movies = [];
+
+    if (typeof window !== 'undefined') {
+      // Perform localStorage action
+      cnt = localStorage.getItem('count');
+    }
+
+    for (let i = 1; i <= cnt; i++) {
+      const movie = JSON.parse(localStorage.getItem(i.toString()));
+      if (movie.lang == lang)
+        movies.push(movie);
+    }
+
+    return movies;
   }
 
-  const movies = [];
+  const [langMovies, setLangMovies] = useState(getMovies());
+  const [titleAsc, setTitleAsc] = useState(false);
+  const [rateAsc, setRateAsc] = useState(true);
 
-  for (let i = 1; i <= cnt; i++) {
-    const movie = JSON.parse(localStorage.getItem(i.toString()));
-    if (movie.lang == lang)
-      movies.push(movie);
+
+  function sortThem(value) {
+
+    switch (value) {
+      case 0:
+        setLangMovies(langMovies.sort((a, b) => (a.rate > b.rate ? 1 : -1)));
+        setRateAsc(false);
+        break;
+      case 1:
+        setLangMovies(langMovies.sort((a, b) => (a.rate < b.rate ? 1 : -1)));
+        setRateAsc(true);
+        break;
+      case 3:
+        setLangMovies(langMovies.sort((a, b) => ((a.title)[0] < (b.title)[0] ? 1 : -1)));
+        setTitleAsc(false);
+        break;
+      case 4:
+        setLangMovies(langMovies.sort((a, b) => ((a.title)[0] > (b.title)[0] ? 1 : -1)));
+        setTitleAsc(true);
+        break;
+      default:
+        setLangMovies(langMovies);
+        break;
+
+    }
   }
 
   const up = <svg xmlns="http://www.w3.org/2000/svg" className="relative h-4 w-4 -top-1" viewBox="0 0 20 20" fill="currentColor">
@@ -48,6 +91,8 @@ export default function Cards({ lang }) {
       variants={cards}
       initial="hidden"
       animate="show"
+
+      className=" max-h-[700px] overflow-scroll"
     >
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
@@ -55,19 +100,19 @@ export default function Cards({ lang }) {
         transition={{ duration: 1.2 }}
 
         className="flex justify-between mb-5 ">
-        <div className="flex items-center cursor-pointer">
+        <div onClick={() => { sortThem(titleAsc == true ? 3 : 4) }} className="flex items-center cursor-pointer">
           <h1 className="inline mr-2 font-semibold">Title</h1>
           <span>{down}{up}</span>
         </div>
 
-        <div className="flex items-center cursor-pointer">
+        <div onClick={() => { sortThem(rateAsc == true ? 0 : 1) }} className="flex items-center cursor-pointer">
           <h1 className="inline mr-2 font-semibold">Rating</h1>
           <span>{down}{up}</span>
         </div>
       </motion.div>
 
       {
-        movies.map((movie) => (
+        langMovies.map((movie) => (
           <motion.div
             layout
             variants={card}
